@@ -14,31 +14,32 @@ format:
 
 . . .
 
-![](images/the-bear.png){.absolute top="175" left="400" width="328"}
+![](images/the-bear.png){.absolute top="175" left="400" width="250"}
 
 ## Make me the *most* flavoursome...
 
 . . .
 
-![](images/lasagne.jpg){.absolute top="150" left="300"}
+![](images/lasagne.jpeg){.absolute top="150" left="300"}
 
 ## The catch is...
 
 . . .
 
-![](images/dolmio.jpg){.absolute top="150" left="150" width="200" height="200"}
+![](images/dolmio.jpeg){.absolute top="150" left="100" width="200" height="200"}
+
 
 . . .
 
-![](images/dolmio-white.jpg){.absolute top="150" left="150" width="200" height="200"}
+![](images/dolmio-white.jpeg){.absolute top="150" left="300" width="200" height="200"}
 
 . . .
 
-![](images/tagliatelle.jpg){.absolute top="150" left="600" width="200" height="200"}
+![](images/tagliatelle.jpeg){.absolute top="150" left="600" width="200" height="200"}
 
 . . .
 
-![](images/mozzarella.jpg){.absolute top="400" left="350" width="200" height="200"}
+![](images/mozzarella.jpeg){.absolute top="400" left="350" width="200" height="200"}
 
 ## Your reaction...
 
@@ -60,35 +61,35 @@ You need flexibility!
 
 . . .
 
-![](images/red-wine.jpg){.absolute top="200" left="150" width="150" height="300"}
+![](images/red-wine.jpeg){.absolute top="200" left="100" width="150" height="300"}
 
 . . .
 
-![](images/nutmeg.jpg){.absolute top="150" left="350" width="300" height="300"}
+![](images/nutmeg.jpeg){.absolute top="150" left="350" width="300" height="300"}
 
 . . .
 
-![](images/anchovies.jpg){.absolute top="450" left="300" width="200" height="200"}
+![](images/anchovies.jpeg){.absolute top="300" left="750" width="200" height="200"}
 
 ## Excel = ...
 
-![](images/dolmio.jpg){.absolute top="150" left="150" width="200" height="200"}
+![](images/dolmio.jpeg){.absolute top="150" left="100" width="200" height="200"}
 
-![](images/dolmio-white.jpg){.absolute top="150" left="150" width="200" height="200"}
+![](images/dolmio-white.jpeg){.absolute top="150" left="300" width="200" height="200"}
 
-![](images/tagliatelle.jpg){.absolute top="150" left="600" width="200" height="200"}
+![](images/tagliatelle.jpeg){.absolute top="150" left="600" width="200" height="200"}
 
-![](images/mozzarella.jpg){.absolute top="400" left="350" width="200" height="200"}
+![](images/mozzarella.jpeg){.absolute top="400" left="350" width="200" height="200"}
 
 ## Code = ...
 
-![](images/red-wine.jpg){.absolute top="200" left="150" width="150" height="300"}
+![](images/red-wine.jpeg){.absolute top="200" left="100" width="150" height="300"}
 
-![](images/nutmeg.jpg){.absolute top="150" left="350" width="300" height="300"}
+![](images/nutmeg.jpeg){.absolute top="150" left="350" width="300" height="300"}
 
-![](images/anchovies.jpg){.absolute top="450" left="300" width="200" height="200"}
+![](images/anchovies.jpeg){.absolute top="300" left="750" width="200" height="200"}
 
-## One other thing...
+## But there's another issue with Excel...
 
 . . .
 
@@ -108,7 +109,7 @@ Have you ever stared at an Excel spreadsheet and wondered:
 
 . . .
 
-![](images/lasagne.jpg){.absolute top="150" left="300"}
+![](images/lasagne.jpeg){.absolute top="150" left="300"}
 
 # Part II: Code 🤯
 
