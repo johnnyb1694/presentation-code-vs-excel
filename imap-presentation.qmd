@@ -1,0 +1,250 @@
+---
+title: "Writing code, saving sanity"
+subtitle: "Why *text* is the real superhero"
+format:
+  revealjs:
+    slide-number: true
+    preview-links: auto
+    footer: <Blog - www.nonstandarddev.com>
+---
+
+# Part I: Excel 🤔
+
+## Let's talk about food 🍕🌿
+
+. . .
+
+![](images/the-bear.png){.absolute top="175" left="400" width="328"}
+
+## Make me the *most* flavoursome...
+
+. . .
+
+![](images/lasagne.jpg){.absolute top="150" left="300"}
+
+## The catch is...
+
+. . .
+
+![](images/dolmio.jpg){.absolute top="150" left="150" width="200" height="200"}
+
+. . .
+
+![](images/dolmio-white.jpg){.absolute top="150" left="150" width="200" height="200"}
+
+. . .
+
+![](images/tagliatelle.jpg){.absolute top="150" left="600" width="200" height="200"}
+
+. . .
+
+![](images/mozzarella.jpg){.absolute top="400" left="350" width="200" height="200"}
+
+## Your reaction...
+
+. . .
+
+<p align="center">
+
+<iframe src="https://giphy.com/embed/hfTUqQGPX1AP0cDBEu" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen>
+
+</iframe>
+
+</p>
+
+## The truth is...
+
+. . .
+
+You need flexibility!
+
+. . .
+
+![](images/red-wine.jpg){.absolute top="200" left="150" width="150" height="300"}
+
+. . .
+
+![](images/nutmeg.jpg){.absolute top="150" left="350" width="300" height="300"}
+
+. . .
+
+![](images/anchovies.jpg){.absolute top="450" left="300" width="200" height="200"}
+
+## Excel = ...
+
+![](images/dolmio.jpg){.absolute top="150" left="150" width="200" height="200"}
+
+![](images/dolmio-white.jpg){.absolute top="150" left="150" width="200" height="200"}
+
+![](images/tagliatelle.jpg){.absolute top="150" left="600" width="200" height="200"}
+
+![](images/mozzarella.jpg){.absolute top="400" left="350" width="200" height="200"}
+
+## Code = ...
+
+![](images/red-wine.jpg){.absolute top="200" left="150" width="150" height="300"}
+
+![](images/nutmeg.jpg){.absolute top="150" left="350" width="300" height="300"}
+
+![](images/anchovies.jpg){.absolute top="450" left="300" width="200" height="200"}
+
+## One other thing...
+
+. . .
+
+Have you ever stared at an Excel spreadsheet and wondered:
+
+. . .
+
+<p align="center">
+
+<iframe src="https://giphy.com/embed/GU1ukAMhBJj2ETMR6V" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen>
+
+</iframe>
+
+</p>
+
+## How did you make this lasagne?
+
+. . .
+
+![](images/lasagne.jpg){.absolute top="150" left="300"}
+
+# Part II: Code 🤯
+
+## So code is more "flexible", but what else? {auto-animate="true"}
+
+. . .
+
+```{r}
+options(scipen=999)
+
+raw <- tibble::tribble(
+  ~policy_id, ~class_of_business, ~premium_usd, ~premium_gbp, ~premium_cad,
+  1,          'liability',        100000,       NA,           NA,
+  2,          'property',         NA,           130000,       NA,
+  3,          'cyber',            NA,           100000,       15000,
+) |>
+  purrr::modify_at('class_of_business', as.factor)
+```
+
+```{r}
+#| echo: true
+
+raw
+```
+
+## So code is more "flexible", but what else? {auto-animate="true"}
+
+```{r message=FALSE}
+#| echo: true
+
+raw |>
+  tidyr::pivot_longer(cols = starts_with('premium'), 
+                      names_to = 'currency',
+                      values_to = 'premium')
+```
+
+## So code is more "flexible", but what else? {auto-animate="true"}
+
+```{r message=FALSE}
+#| echo: true
+
+raw |>
+  tidyr::pivot_longer(cols = starts_with('premium'), 
+                      names_to = 'currency',
+                      values_to = 'premium') |>
+  dplyr::filter(!is.na(premium))
+```
+
+## So code is more "flexible", but what else? {auto-animate="true"}
+
+```{r message=FALSE}
+#| echo: true
+
+raw |>
+  tidyr::pivot_longer(cols = starts_with('premium'), 
+                      names_to = 'currency',
+                      values_to = 'premium') |>
+  dplyr::filter(!is.na(premium)) |>
+  dplyr::mutate(currency = stringr::str_replace_all(currency,
+                                                    pattern = 'premium_',
+                                                    replacement = ''),
+                currency = base::toupper(currency),
+                currency = base::as.factor(currency))
+```
+
+## Don't want the qualifiers? No problem! {auto-animate="true"}
+
+```{r message=FALSE}
+#| echo: true
+
+library(tidyverse)
+
+raw |>
+  pivot_longer(cols = starts_with('premium'), 
+               names_to = 'currency',
+               values_to = 'premium') |>
+  filter(!is.na(premium)) |>
+  mutate(currency = str_replace_all(currency,
+                                    pattern = 'premium_',
+                                    replacement = ''),
+         currency = toupper(currency),
+         currency = as.factor(currency))
+```
+
+## Our final 'recipe' {auto-animate="true"}
+
+```{r message=FALSE}
+#| echo: true
+#| code-line-numbers: "|1|4-6|7|8-10|11|12"
+
+library(tidyverse)
+
+clean <- raw |>
+  pivot_longer(cols = starts_with('premium'), 
+               names_to = 'currency',
+               values_to = 'premium') |>
+  filter(!is.na(premium)) |>
+  mutate(currency = str_replace_all(currency,
+                                    pattern = 'premium_',
+                                    replacement = ''),
+         currency = toupper(currency),
+         currency = as.factor(currency))
+```
+
+## Our final 'recipe' {auto-animate="true"}
+
+```{r message=FALSE}
+#| echo: true
+#| code-line-numbers: "|1|4-6|7|8-10|11|12"
+
+library(tidyverse)
+
+clean <- raw |>
+  pivot_longer(cols = starts_with('premium'), 
+               names_to = 'currency',
+               values_to = 'premium') |>
+  filter(!is.na(premium)) |>
+  mutate(currency = str_replace_all(currency,
+                                    pattern = 'premium_',
+                                    replacement = ''),
+         currency = toupper(currency),
+         currency = as.factor(currency))
+
+clean
+```
+
+## The point is...
+
+... *text* wins, every time
+
+. . .
+
+<p align="center">
+
+<iframe src="https://giphy.com/embed/Oe7H865K0YPfY6ILXm" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen>
+
+</iframe>
+
+</p>
