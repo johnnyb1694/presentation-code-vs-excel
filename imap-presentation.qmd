@@ -5,8 +5,28 @@ format:
   revealjs:
     slide-number: true
     preview-links: auto
-    footer: <Blog - www.nonstandarddev.com>
+    footer: https://www.nonstandarddev.com
 ---
+
+## Introduction
+
+::: columns
+::: {.column width="40%"}
+![](images/avatar.jpeg){height="400" width="400"}
+:::
+
+::: {.column width="60%"}
+::: {.fragment .fade-in-then-semi-out}
+My name is `Johnny Breen` 
+:::
+::: {.fragment .fade-in-then-semi-out}
+`Portfolio Optimisation Lead` at Tokio Marine Kiln
+:::
+::: {.fragment .fade-in-then-semi-out}
+You can find me at: `nonstandarddev.com`
+:::
+:::
+:::
 
 # Part I: Excel 🤔
 
@@ -117,25 +137,30 @@ Have you ever stared at an Excel spreadsheet and wondered:
 
 . . .
 
+**Question:** which policy has the largest premium size?
+
 ```{r}
 options(scipen=999)
 
 raw <- tibble::tribble(
   ~policy_id, ~class_of_business, ~premium_usd, ~premium_gbp, ~premium_cad,
   1,          'liability',        100000,       NA,           NA,
-  2,          'property',         NA,           130000,       NA,
+  2,          'property',         NA,           105000,       NA,
   3,          'cyber',            NA,           100000,       15000,
 ) |>
   purrr::modify_at('class_of_business', as.factor)
+
+forex_rates <- c(USD = 1, GBP = 0.78, CAD = 1.36)
 ```
 
 ```{r}
 #| echo: true
-
 raw
+
+forex_rates
 ```
 
-## So code is more "flexible", but what else? {auto-animate="true"}
+## Step 1: `tidyr::pivot_longer()` {auto-animate="true"}
 
 ```{r message=FALSE}
 #| echo: true
@@ -146,7 +171,7 @@ raw |>
                       values_to = 'premium')
 ```
 
-## So code is more "flexible", but what else? {auto-animate="true"}
+## Step 2: `dplyr::filter()` {auto-animate="true"}
 
 ```{r message=FALSE}
 #| echo: true
@@ -158,7 +183,7 @@ raw |>
   dplyr::filter(!is.na(premium))
 ```
 
-## So code is more "flexible", but what else? {auto-animate="true"}
+## Step 3: `dplyr::mutate()` {auto-animate="true"}
 
 ```{r message=FALSE}
 #| echo: true
@@ -168,17 +193,50 @@ raw |>
                       names_to = 'currency',
                       values_to = 'premium') |>
   dplyr::filter(!is.na(premium)) |>
-  dplyr::mutate(currency = stringr::str_replace_all(currency,
-                                                    pattern = 'premium_',
-                                                    replacement = ''),
-                currency = base::toupper(currency),
-                currency = base::as.factor(currency))
+  dplyr::mutate(currency = stringr::str_remove_all(currency,
+                                                   pattern = 'premium_'),
+                currency = base::toupper(currency))
 ```
 
-## Don't want the qualifiers? No problem! {auto-animate="true"}
+## Step 4: `dplyr::mutate()` {auto-animate="true"}
 
 ```{r message=FALSE}
 #| echo: true
+
+raw |>
+  tidyr::pivot_longer(cols = starts_with('premium'), 
+                      names_to = 'currency',
+                      values_to = 'premium') |>
+  dplyr::filter(!is.na(premium)) |>
+  dplyr::mutate(currency = stringr::str_remove_all(currency,
+                                                   pattern = 'premium_'),
+                currency = base::toupper(currency),
+                premium_usd = forex_rates[currency] * premium)
+```
+
+## Step 5: `dplyr::summarise()` {auto-animate="true"}
+
+```{r message=FALSE}
+#| echo: true
+
+raw |>
+  tidyr::pivot_longer(cols = starts_with('premium'), 
+                      names_to = 'currency',
+                      values_to = 'premium') |>
+  dplyr::filter(!is.na(premium)) |>
+  dplyr::mutate(currency = stringr::str_remove_all(currency,
+                                                   pattern = 'premium_'),
+                currency = base::toupper(currency),
+                premium_usd = forex_rates[currency] * premium) |>
+  dplyr::summarise(total_premium_usd = sum(premium_usd),
+                   .by = 'policy_id')
+```
+
+## Step 6 (Optional): remove qualifiers {auto-animate="true"}
+
+```{r message=FALSE}
+#| echo: true
+#| code-line-numbers: "|1"
 
 library(tidyverse)
 
@@ -187,11 +245,12 @@ raw |>
                names_to = 'currency',
                values_to = 'premium') |>
   filter(!is.na(premium)) |>
-  mutate(currency = str_replace_all(currency,
-                                    pattern = 'premium_',
-                                    replacement = ''),
+  mutate(currency = str_remove_all(currency,
+                                   pattern = 'premium_'),
          currency = toupper(currency),
-         currency = as.factor(currency))
+         premium_usd = forex_rates[currency] * premium) |>
+  summarise(total_premium_usd = sum(premium_usd),
+            .by = 'policy_id')
 ```
 
 ## Our final 'recipe' {auto-animate="true"}
@@ -207,18 +266,19 @@ clean <- raw |>
                names_to = 'currency',
                values_to = 'premium') |>
   filter(!is.na(premium)) |>
-  mutate(currency = str_replace_all(currency,
-                                    pattern = 'premium_',
-                                    replacement = ''),
+  mutate(currency = str_remove_all(currency,
+                                   pattern = 'premium_'),
          currency = toupper(currency),
-         currency = as.factor(currency))
+         premium_usd = forex_rates[currency] * premium) |>
+  summarise(total_premium_usd = sum(premium_usd),
+            .by = 'policy_id')
 ```
 
 ## Our final 'recipe' {auto-animate="true"}
 
 ```{r message=FALSE}
 #| echo: true
-#| code-line-numbers: "|1|4-6|7|8-10|11|12"
+#| code-line-numbers: "|1|4-6|7|8-10|11|12|13-14"
 
 library(tidyverse)
 
@@ -227,11 +287,12 @@ clean <- raw |>
                names_to = 'currency',
                values_to = 'premium') |>
   filter(!is.na(premium)) |>
-  mutate(currency = str_replace_all(currency,
-                                    pattern = 'premium_',
-                                    replacement = ''),
+  mutate(currency = str_remove_all(currency,
+                                   pattern = 'premium_'),
          currency = toupper(currency),
-         currency = as.factor(currency))
+         premium_usd = forex_rates[currency] * premium) |>
+  summarise(total_premium_usd = sum(premium_usd),
+            .by = 'policy_id') 
 
 clean
 ```

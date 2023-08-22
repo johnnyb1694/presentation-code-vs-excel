@@ -396,6 +396,24 @@
 </div>
 
 </section>
+<section id="introduction" class="slide level2">
+<h2>Introduction</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<p><img data-src="images/avatar.jpeg" width="400" height="400"></p>
+</div><div class="column" style="width:60%;">
+<div class="fragment fade-in-then-semi-out">
+<p>My name is <code>Johnny Breen</code></p>
+</div>
+<div class="fragment fade-in-then-semi-out">
+<p><code>Portfolio Optimisation Lead</code> at Tokio Marine Kiln</p>
+</div>
+<div class="fragment fade-in-then-semi-out">
+<p>You can find me at: <code>nonstandarddev.com</code></p>
+</div>
+</div>
+</div>
+</section>
 <section>
 <section id="part-i-excel" class="title-slide slide level1 center">
 <h1>Part I: Excel 🤔</h1>
@@ -491,26 +509,32 @@
 <section id="so-code-is-more-flexible-but-what-else" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">So code is more “flexible”, but what else?</h2>
 <div class="fragment">
+<p><strong>Question:</strong> which policy has the largest premium size?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb1-1" class="hljs-ln-code"><a href="#cb1-1"></a>raw</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>raw</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 5
   policy_id class_of_business premium_usd premium_gbp premium_cad
       &lt;dbl&gt; &lt;fct&gt;                   &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
 1         1 liability              100000          NA          NA
-2         2 property                   NA      130000          NA
+2         2 property                   NA      105000          NA
 3         3 cyber                      NA      100000       15000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>forex_rates</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> USD  GBP  CAD 
+1.00 0.78 1.36 </code></pre>
 </div>
 </div>
 </div>
 </section>
-<section id="so-code-is-more-flexible-but-what-else-1" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">So code is more “flexible”, but what else?</h2>
+<section id="step-1-tidyrpivot_longer" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Step 1: <code>tidyr::pivot_longer()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb3-1" class="hljs-ln-code"><a href="#cb3-1"></a>raw <span class="sc">|&gt;</span></span>
-<span id="cb3-2" class="hljs-ln-code"><a href="#cb3-2"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">'premium'</span>), </span>
-<span id="cb3-3" class="hljs-ln-code"><a href="#cb3-3"></a>                      <span class="at">names_to =</span> <span class="st">'currency'</span>,</span>
-<span id="cb3-4" class="hljs-ln-code"><a href="#cb3-4"></a>                      <span class="at">values_to =</span> <span class="st">'premium'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb5-1" class="hljs-ln-code"><a href="#cb5-1"></a>raw <span class="sc">|&gt;</span></span>
+<span id="cb5-2" class="hljs-ln-code"><a href="#cb5-2"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">'premium'</span>), </span>
+<span id="cb5-3" class="hljs-ln-code"><a href="#cb5-3"></a>                      <span class="at">names_to =</span> <span class="st">'currency'</span>,</span>
+<span id="cb5-4" class="hljs-ln-code"><a href="#cb5-4"></a>                      <span class="at">values_to =</span> <span class="st">'premium'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 9 × 4
   policy_id class_of_business currency    premium
@@ -519,7 +543,7 @@
 2         1 liability         premium_gbp      NA
 3         1 liability         premium_cad      NA
 4         2 property          premium_usd      NA
-5         2 property          premium_gbp  130000
+5         2 property          premium_gbp  105000
 6         2 property          premium_cad      NA
 7         3 cyber             premium_usd      NA
 8         3 cyber             premium_gbp  100000
@@ -527,117 +551,163 @@
 </div>
 </div>
 </section>
-<section id="so-code-is-more-flexible-but-what-else-2" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">So code is more “flexible”, but what else?</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb5-1" class="hljs-ln-code"><a href="#cb5-1"></a>raw <span class="sc">|&gt;</span></span>
-<span id="cb5-2" class="hljs-ln-code"><a href="#cb5-2"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">'premium'</span>), </span>
-<span id="cb5-3" class="hljs-ln-code"><a href="#cb5-3"></a>                      <span class="at">names_to =</span> <span class="st">'currency'</span>,</span>
-<span id="cb5-4" class="hljs-ln-code"><a href="#cb5-4"></a>                      <span class="at">values_to =</span> <span class="st">'premium'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb5-5" class="hljs-ln-code"><a href="#cb5-5"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(premium))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 4
-  policy_id class_of_business currency    premium
-      &lt;dbl&gt; &lt;fct&gt;             &lt;chr&gt;         &lt;dbl&gt;
-1         1 liability         premium_usd  100000
-2         2 property          premium_gbp  130000
-3         3 cyber             premium_gbp  100000
-4         3 cyber             premium_cad   15000</code></pre>
-</div>
-</div>
-</section>
-<section id="so-code-is-more-flexible-but-what-else-3" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">So code is more “flexible”, but what else?</h2>
+<section id="step-2-dplyrfilter" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Step 2: <code>dplyr::filter()</code></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb7-1" class="hljs-ln-code"><a href="#cb7-1"></a>raw <span class="sc">|&gt;</span></span>
 <span id="cb7-2" class="hljs-ln-code"><a href="#cb7-2"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">'premium'</span>), </span>
 <span id="cb7-3" class="hljs-ln-code"><a href="#cb7-3"></a>                      <span class="at">names_to =</span> <span class="st">'currency'</span>,</span>
 <span id="cb7-4" class="hljs-ln-code"><a href="#cb7-4"></a>                      <span class="at">values_to =</span> <span class="st">'premium'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb7-5" class="hljs-ln-code"><a href="#cb7-5"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(premium)) <span class="sc">|&gt;</span></span>
-<span id="cb7-6" class="hljs-ln-code"><a href="#cb7-6"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">currency =</span> stringr<span class="sc">::</span><span class="fu">str_replace_all</span>(currency,</span>
-<span id="cb7-7" class="hljs-ln-code"><a href="#cb7-7"></a>                                                    <span class="at">pattern =</span> <span class="st">'premium_'</span>,</span>
-<span id="cb7-8" class="hljs-ln-code"><a href="#cb7-8"></a>                                                    <span class="at">replacement =</span> <span class="st">''</span>),</span>
-<span id="cb7-9" class="hljs-ln-code"><a href="#cb7-9"></a>                <span class="at">currency =</span> base<span class="sc">::</span><span class="fu">toupper</span>(currency),</span>
-<span id="cb7-10" class="hljs-ln-code"><a href="#cb7-10"></a>                <span class="at">currency =</span> base<span class="sc">::</span><span class="fu">as.factor</span>(currency))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-5" class="hljs-ln-code"><a href="#cb7-5"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(premium))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 4
+  policy_id class_of_business currency    premium
+      &lt;dbl&gt; &lt;fct&gt;             &lt;chr&gt;         &lt;dbl&gt;
+1         1 liability         premium_usd  100000
+2         2 property          premium_gbp  105000
+3         3 cyber             premium_gbp  100000
+4         3 cyber             premium_cad   15000</code></pre>
+</div>
+</div>
+</section>
+<section id="step-3-dplyrmutate" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Step 3: <code>dplyr::mutate()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb9-1" class="hljs-ln-code"><a href="#cb9-1"></a>raw <span class="sc">|&gt;</span></span>
+<span id="cb9-2" class="hljs-ln-code"><a href="#cb9-2"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">'premium'</span>), </span>
+<span id="cb9-3" class="hljs-ln-code"><a href="#cb9-3"></a>                      <span class="at">names_to =</span> <span class="st">'currency'</span>,</span>
+<span id="cb9-4" class="hljs-ln-code"><a href="#cb9-4"></a>                      <span class="at">values_to =</span> <span class="st">'premium'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-5" class="hljs-ln-code"><a href="#cb9-5"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(premium)) <span class="sc">|&gt;</span></span>
+<span id="cb9-6" class="hljs-ln-code"><a href="#cb9-6"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">currency =</span> stringr<span class="sc">::</span><span class="fu">str_remove_all</span>(currency,</span>
+<span id="cb9-7" class="hljs-ln-code"><a href="#cb9-7"></a>                                                   <span class="at">pattern =</span> <span class="st">'premium_'</span>),</span>
+<span id="cb9-8" class="hljs-ln-code"><a href="#cb9-8"></a>                <span class="at">currency =</span> base<span class="sc">::</span><span class="fu">toupper</span>(currency))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 4
   policy_id class_of_business currency premium
-      &lt;dbl&gt; &lt;fct&gt;             &lt;fct&gt;      &lt;dbl&gt;
+      &lt;dbl&gt; &lt;fct&gt;             &lt;chr&gt;      &lt;dbl&gt;
 1         1 liability         USD       100000
-2         2 property          GBP       130000
+2         2 property          GBP       105000
 3         3 cyber             GBP       100000
 4         3 cyber             CAD        15000</code></pre>
 </div>
 </div>
 </section>
-<section id="dont-want-the-qualifiers-no-problem" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Don’t want the qualifiers? No problem!</h2>
+<section id="step-4-dplyrmutate" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Step 4: <code>dplyr::mutate()</code></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb9-1" class="hljs-ln-code"><a href="#cb9-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb9-2" class="hljs-ln-code"><a href="#cb9-2"></a></span>
-<span id="cb9-3" class="hljs-ln-code"><a href="#cb9-3"></a>raw <span class="sc">|&gt;</span></span>
-<span id="cb9-4" class="hljs-ln-code"><a href="#cb9-4"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">'premium'</span>), </span>
-<span id="cb9-5" class="hljs-ln-code"><a href="#cb9-5"></a>               <span class="at">names_to =</span> <span class="st">'currency'</span>,</span>
-<span id="cb9-6" class="hljs-ln-code"><a href="#cb9-6"></a>               <span class="at">values_to =</span> <span class="st">'premium'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-7" class="hljs-ln-code"><a href="#cb9-7"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(premium)) <span class="sc">|&gt;</span></span>
-<span id="cb9-8" class="hljs-ln-code"><a href="#cb9-8"></a>  <span class="fu">mutate</span>(<span class="at">currency =</span> <span class="fu">str_replace_all</span>(currency,</span>
-<span id="cb9-9" class="hljs-ln-code"><a href="#cb9-9"></a>                                    <span class="at">pattern =</span> <span class="st">'premium_'</span>,</span>
-<span id="cb9-10" class="hljs-ln-code"><a href="#cb9-10"></a>                                    <span class="at">replacement =</span> <span class="st">''</span>),</span>
-<span id="cb9-11" class="hljs-ln-code"><a href="#cb9-11"></a>         <span class="at">currency =</span> <span class="fu">toupper</span>(currency),</span>
-<span id="cb9-12" class="hljs-ln-code"><a href="#cb9-12"></a>         <span class="at">currency =</span> <span class="fu">as.factor</span>(currency))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb11-1" class="hljs-ln-code"><a href="#cb11-1"></a>raw <span class="sc">|&gt;</span></span>
+<span id="cb11-2" class="hljs-ln-code"><a href="#cb11-2"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">'premium'</span>), </span>
+<span id="cb11-3" class="hljs-ln-code"><a href="#cb11-3"></a>                      <span class="at">names_to =</span> <span class="st">'currency'</span>,</span>
+<span id="cb11-4" class="hljs-ln-code"><a href="#cb11-4"></a>                      <span class="at">values_to =</span> <span class="st">'premium'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-5" class="hljs-ln-code"><a href="#cb11-5"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(premium)) <span class="sc">|&gt;</span></span>
+<span id="cb11-6" class="hljs-ln-code"><a href="#cb11-6"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">currency =</span> stringr<span class="sc">::</span><span class="fu">str_remove_all</span>(currency,</span>
+<span id="cb11-7" class="hljs-ln-code"><a href="#cb11-7"></a>                                                   <span class="at">pattern =</span> <span class="st">'premium_'</span>),</span>
+<span id="cb11-8" class="hljs-ln-code"><a href="#cb11-8"></a>                <span class="at">currency =</span> base<span class="sc">::</span><span class="fu">toupper</span>(currency),</span>
+<span id="cb11-9" class="hljs-ln-code"><a href="#cb11-9"></a>                <span class="at">premium_usd =</span> forex_rates[currency] <span class="sc">*</span> premium)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 4
-  policy_id class_of_business currency premium
-      &lt;dbl&gt; &lt;fct&gt;             &lt;fct&gt;      &lt;dbl&gt;
-1         1 liability         USD       100000
-2         2 property          GBP       130000
-3         3 cyber             GBP       100000
-4         3 cyber             CAD        15000</code></pre>
+<pre><code># A tibble: 4 × 5
+  policy_id class_of_business currency premium premium_usd
+      &lt;dbl&gt; &lt;fct&gt;             &lt;chr&gt;      &lt;dbl&gt;       &lt;dbl&gt;
+1         1 liability         USD       100000      100000
+2         2 property          GBP       105000       81900
+3         3 cyber             GBP       100000       78000
+4         3 cyber             CAD        15000       20400</code></pre>
+</div>
+</div>
+</section>
+<section id="step-5-dplyrsummarise" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Step 5: <code>dplyr::summarise()</code></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb13-1" class="hljs-ln-code"><a href="#cb13-1"></a>raw <span class="sc">|&gt;</span></span>
+<span id="cb13-2" class="hljs-ln-code"><a href="#cb13-2"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">'premium'</span>), </span>
+<span id="cb13-3" class="hljs-ln-code"><a href="#cb13-3"></a>                      <span class="at">names_to =</span> <span class="st">'currency'</span>,</span>
+<span id="cb13-4" class="hljs-ln-code"><a href="#cb13-4"></a>                      <span class="at">values_to =</span> <span class="st">'premium'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb13-5" class="hljs-ln-code"><a href="#cb13-5"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(premium)) <span class="sc">|&gt;</span></span>
+<span id="cb13-6" class="hljs-ln-code"><a href="#cb13-6"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">currency =</span> stringr<span class="sc">::</span><span class="fu">str_remove_all</span>(currency,</span>
+<span id="cb13-7" class="hljs-ln-code"><a href="#cb13-7"></a>                                                   <span class="at">pattern =</span> <span class="st">'premium_'</span>),</span>
+<span id="cb13-8" class="hljs-ln-code"><a href="#cb13-8"></a>                <span class="at">currency =</span> base<span class="sc">::</span><span class="fu">toupper</span>(currency),</span>
+<span id="cb13-9" class="hljs-ln-code"><a href="#cb13-9"></a>                <span class="at">premium_usd =</span> forex_rates[currency] <span class="sc">*</span> premium) <span class="sc">|&gt;</span></span>
+<span id="cb13-10" class="hljs-ln-code"><a href="#cb13-10"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">total_premium_usd =</span> <span class="fu">sum</span>(premium_usd),</span>
+<span id="cb13-11" class="hljs-ln-code"><a href="#cb13-11"></a>                   <span class="at">.by =</span> <span class="st">'policy_id'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  policy_id total_premium_usd
+      &lt;dbl&gt;             &lt;dbl&gt;
+1         1            100000
+2         2             81900
+3         3             98400</code></pre>
+</div>
+</div>
+</section>
+<section id="step-6-optional-remove-qualifiers" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Step 6 (Optional): remove qualifiers</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" data-code-line-numbers="|1"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb15-1" class="hljs-ln-code"><a href="#cb15-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb15-2" class="hljs-ln-code"><a href="#cb15-2"></a></span>
+<span id="cb15-3" class="hljs-ln-code"><a href="#cb15-3"></a>raw <span class="sc">|&gt;</span></span>
+<span id="cb15-4" class="hljs-ln-code"><a href="#cb15-4"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">'premium'</span>), </span>
+<span id="cb15-5" class="hljs-ln-code"><a href="#cb15-5"></a>               <span class="at">names_to =</span> <span class="st">'currency'</span>,</span>
+<span id="cb15-6" class="hljs-ln-code"><a href="#cb15-6"></a>               <span class="at">values_to =</span> <span class="st">'premium'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb15-7" class="hljs-ln-code"><a href="#cb15-7"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(premium)) <span class="sc">|&gt;</span></span>
+<span id="cb15-8" class="hljs-ln-code"><a href="#cb15-8"></a>  <span class="fu">mutate</span>(<span class="at">currency =</span> <span class="fu">str_remove_all</span>(currency,</span>
+<span id="cb15-9" class="hljs-ln-code"><a href="#cb15-9"></a>                                   <span class="at">pattern =</span> <span class="st">'premium_'</span>),</span>
+<span id="cb15-10" class="hljs-ln-code"><a href="#cb15-10"></a>         <span class="at">currency =</span> <span class="fu">toupper</span>(currency),</span>
+<span id="cb15-11" class="hljs-ln-code"><a href="#cb15-11"></a>         <span class="at">premium_usd =</span> forex_rates[currency] <span class="sc">*</span> premium) <span class="sc">|&gt;</span></span>
+<span id="cb15-12" class="hljs-ln-code"><a href="#cb15-12"></a>  <span class="fu">summarise</span>(<span class="at">total_premium_usd =</span> <span class="fu">sum</span>(premium_usd),</span>
+<span id="cb15-13" class="hljs-ln-code"><a href="#cb15-13"></a>            <span class="at">.by =</span> <span class="st">'policy_id'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  policy_id total_premium_usd
+      &lt;dbl&gt;             &lt;dbl&gt;
+1         1            100000
+2         2             81900
+3         3             98400</code></pre>
 </div>
 </div>
 </section>
 <section id="our-final-recipe" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Our final ‘recipe’</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11" data-code-line-numbers="|1|4-6|7|8-10|11|12"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb11-1" class="hljs-ln-code"><a href="#cb11-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb11-2" class="hljs-ln-code"><a href="#cb11-2"></a></span>
-<span id="cb11-3" class="hljs-ln-code"><a href="#cb11-3"></a>clean <span class="ot">&lt;-</span> raw <span class="sc">|&gt;</span></span>
-<span id="cb11-4" class="hljs-ln-code"><a href="#cb11-4"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">'premium'</span>), </span>
-<span id="cb11-5" class="hljs-ln-code"><a href="#cb11-5"></a>               <span class="at">names_to =</span> <span class="st">'currency'</span>,</span>
-<span id="cb11-6" class="hljs-ln-code"><a href="#cb11-6"></a>               <span class="at">values_to =</span> <span class="st">'premium'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb11-7" class="hljs-ln-code"><a href="#cb11-7"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(premium)) <span class="sc">|&gt;</span></span>
-<span id="cb11-8" class="hljs-ln-code"><a href="#cb11-8"></a>  <span class="fu">mutate</span>(<span class="at">currency =</span> <span class="fu">str_replace_all</span>(currency,</span>
-<span id="cb11-9" class="hljs-ln-code"><a href="#cb11-9"></a>                                    <span class="at">pattern =</span> <span class="st">'premium_'</span>,</span>
-<span id="cb11-10" class="hljs-ln-code"><a href="#cb11-10"></a>                                    <span class="at">replacement =</span> <span class="st">''</span>),</span>
-<span id="cb11-11" class="hljs-ln-code"><a href="#cb11-11"></a>         <span class="at">currency =</span> <span class="fu">toupper</span>(currency),</span>
-<span id="cb11-12" class="hljs-ln-code"><a href="#cb11-12"></a>         <span class="at">currency =</span> <span class="fu">as.factor</span>(currency))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17" data-code-line-numbers="|1|4-6|7|8-10|11|12"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb17-1" class="hljs-ln-code"><a href="#cb17-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb17-2" class="hljs-ln-code"><a href="#cb17-2"></a></span>
+<span id="cb17-3" class="hljs-ln-code"><a href="#cb17-3"></a>clean <span class="ot">&lt;-</span> raw <span class="sc">|&gt;</span></span>
+<span id="cb17-4" class="hljs-ln-code"><a href="#cb17-4"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">'premium'</span>), </span>
+<span id="cb17-5" class="hljs-ln-code"><a href="#cb17-5"></a>               <span class="at">names_to =</span> <span class="st">'currency'</span>,</span>
+<span id="cb17-6" class="hljs-ln-code"><a href="#cb17-6"></a>               <span class="at">values_to =</span> <span class="st">'premium'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-7" class="hljs-ln-code"><a href="#cb17-7"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(premium)) <span class="sc">|&gt;</span></span>
+<span id="cb17-8" class="hljs-ln-code"><a href="#cb17-8"></a>  <span class="fu">mutate</span>(<span class="at">currency =</span> <span class="fu">str_remove_all</span>(currency,</span>
+<span id="cb17-9" class="hljs-ln-code"><a href="#cb17-9"></a>                                   <span class="at">pattern =</span> <span class="st">'premium_'</span>),</span>
+<span id="cb17-10" class="hljs-ln-code"><a href="#cb17-10"></a>         <span class="at">currency =</span> <span class="fu">toupper</span>(currency),</span>
+<span id="cb17-11" class="hljs-ln-code"><a href="#cb17-11"></a>         <span class="at">premium_usd =</span> forex_rates[currency] <span class="sc">*</span> premium) <span class="sc">|&gt;</span></span>
+<span id="cb17-12" class="hljs-ln-code"><a href="#cb17-12"></a>  <span class="fu">summarise</span>(<span class="at">total_premium_usd =</span> <span class="fu">sum</span>(premium_usd),</span>
+<span id="cb17-13" class="hljs-ln-code"><a href="#cb17-13"></a>            <span class="at">.by =</span> <span class="st">'policy_id'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="our-final-recipe-1" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Our final ‘recipe’</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12" data-code-line-numbers="|1|4-6|7|8-10|11|12"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb12-1" class="hljs-ln-code"><a href="#cb12-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb12-2" class="hljs-ln-code"><a href="#cb12-2"></a></span>
-<span id="cb12-3" class="hljs-ln-code"><a href="#cb12-3"></a>clean <span class="ot">&lt;-</span> raw <span class="sc">|&gt;</span></span>
-<span id="cb12-4" class="hljs-ln-code"><a href="#cb12-4"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">'premium'</span>), </span>
-<span id="cb12-5" class="hljs-ln-code"><a href="#cb12-5"></a>               <span class="at">names_to =</span> <span class="st">'currency'</span>,</span>
-<span id="cb12-6" class="hljs-ln-code"><a href="#cb12-6"></a>               <span class="at">values_to =</span> <span class="st">'premium'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb12-7" class="hljs-ln-code"><a href="#cb12-7"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(premium)) <span class="sc">|&gt;</span></span>
-<span id="cb12-8" class="hljs-ln-code"><a href="#cb12-8"></a>  <span class="fu">mutate</span>(<span class="at">currency =</span> <span class="fu">str_replace_all</span>(currency,</span>
-<span id="cb12-9" class="hljs-ln-code"><a href="#cb12-9"></a>                                    <span class="at">pattern =</span> <span class="st">'premium_'</span>,</span>
-<span id="cb12-10" class="hljs-ln-code"><a href="#cb12-10"></a>                                    <span class="at">replacement =</span> <span class="st">''</span>),</span>
-<span id="cb12-11" class="hljs-ln-code"><a href="#cb12-11"></a>         <span class="at">currency =</span> <span class="fu">toupper</span>(currency),</span>
-<span id="cb12-12" class="hljs-ln-code"><a href="#cb12-12"></a>         <span class="at">currency =</span> <span class="fu">as.factor</span>(currency))</span>
-<span id="cb12-13" class="hljs-ln-code"><a href="#cb12-13"></a></span>
-<span id="cb12-14" class="hljs-ln-code"><a href="#cb12-14"></a>clean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18" data-code-line-numbers="|1|4-6|7|8-10|11|12|13-14"><pre class="sourceCode numberSource r number-lines code-with-copy" data-id="quarto-animate-code"><code class="sourceCode r hljs"><span id="cb18-1" class="hljs-ln-code"><a href="#cb18-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb18-2" class="hljs-ln-code"><a href="#cb18-2"></a></span>
+<span id="cb18-3" class="hljs-ln-code"><a href="#cb18-3"></a>clean <span class="ot">&lt;-</span> raw <span class="sc">|&gt;</span></span>
+<span id="cb18-4" class="hljs-ln-code"><a href="#cb18-4"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">starts_with</span>(<span class="st">'premium'</span>), </span>
+<span id="cb18-5" class="hljs-ln-code"><a href="#cb18-5"></a>               <span class="at">names_to =</span> <span class="st">'currency'</span>,</span>
+<span id="cb18-6" class="hljs-ln-code"><a href="#cb18-6"></a>               <span class="at">values_to =</span> <span class="st">'premium'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb18-7" class="hljs-ln-code"><a href="#cb18-7"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(premium)) <span class="sc">|&gt;</span></span>
+<span id="cb18-8" class="hljs-ln-code"><a href="#cb18-8"></a>  <span class="fu">mutate</span>(<span class="at">currency =</span> <span class="fu">str_remove_all</span>(currency,</span>
+<span id="cb18-9" class="hljs-ln-code"><a href="#cb18-9"></a>                                   <span class="at">pattern =</span> <span class="st">'premium_'</span>),</span>
+<span id="cb18-10" class="hljs-ln-code"><a href="#cb18-10"></a>         <span class="at">currency =</span> <span class="fu">toupper</span>(currency),</span>
+<span id="cb18-11" class="hljs-ln-code"><a href="#cb18-11"></a>         <span class="at">premium_usd =</span> forex_rates[currency] <span class="sc">*</span> premium) <span class="sc">|&gt;</span></span>
+<span id="cb18-12" class="hljs-ln-code"><a href="#cb18-12"></a>  <span class="fu">summarise</span>(<span class="at">total_premium_usd =</span> <span class="fu">sum</span>(premium_usd),</span>
+<span id="cb18-13" class="hljs-ln-code"><a href="#cb18-13"></a>            <span class="at">.by =</span> <span class="st">'policy_id'</span>) </span>
+<span id="cb18-14" class="hljs-ln-code"><a href="#cb18-14"></a></span>
+<span id="cb18-15" class="hljs-ln-code"><a href="#cb18-15"></a>clean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 4
-  policy_id class_of_business currency premium
-      &lt;dbl&gt; &lt;fct&gt;             &lt;fct&gt;      &lt;dbl&gt;
-1         1 liability         USD       100000
-2         2 property          GBP       130000
-3         3 cyber             GBP       100000
-4         3 cyber             CAD        15000</code></pre>
+<pre><code># A tibble: 3 × 2
+  policy_id total_premium_usd
+      &lt;dbl&gt;             &lt;dbl&gt;
+1         1            100000
+2         2             81900
+3         3             98400</code></pre>
 </div>
 </div>
 </section>
@@ -650,7 +720,7 @@
 </iframe>
 </p>
 <div class="footer footer-default">
-<p>&lt;Blog - www.nonstandarddev.com&gt;</p>
+<p>https://www.nonstandarddev.com</p>
 </div>
 </div>
 </section></section>
