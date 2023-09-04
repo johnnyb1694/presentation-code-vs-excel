@@ -1,5 +1,7 @@
 project:
   title: "imap-presentation"
+  type: website
+  output-dir: docs
 
 editor: visual
 

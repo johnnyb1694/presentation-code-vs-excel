@@ -1,0 +1,142 @@
+[
+  {
+    "objectID": "imap-presentation.html#introduction",
+    "href": "imap-presentation.html#introduction",
+    "title": "Writing code, saving sanity",
+    "section": "Introduction",
+    "text": "Introduction\n\n\n\n\n\nMy name is Johnny Breen\n\n\nPortfolio Optimisation Lead at Tokio Marine Kiln\n\n\nYou can find me at: nonstandarddev.com"
+  },
+  {
+    "objectID": "imap-presentation.html#lets-talk-about-food",
+    "href": "imap-presentation.html#lets-talk-about-food",
+    "title": "Writing code, saving sanity",
+    "section": "Let’s talk about food 🍕🌿",
+    "text": "Let’s talk about food 🍕🌿"
+  },
+  {
+    "objectID": "imap-presentation.html#make-me-the-most-flavoursome",
+    "href": "imap-presentation.html#make-me-the-most-flavoursome",
+    "title": "Writing code, saving sanity",
+    "section": "Make me the most flavoursome…",
+    "text": "Make me the most flavoursome…"
+  },
+  {
+    "objectID": "imap-presentation.html#the-catch-is",
+    "href": "imap-presentation.html#the-catch-is",
+    "title": "Writing code, saving sanity",
+    "section": "The catch is…",
+    "text": "The catch is…"
+  },
+  {
+    "objectID": "imap-presentation.html#your-reaction",
+    "href": "imap-presentation.html#your-reaction",
+    "title": "Writing code, saving sanity",
+    "section": "Your reaction…",
+    "text": "Your reaction…"
+  },
+  {
+    "objectID": "imap-presentation.html#the-truth-is",
+    "href": "imap-presentation.html#the-truth-is",
+    "title": "Writing code, saving sanity",
+    "section": "The truth is…",
+    "text": "The truth is…\n\nYou need flexibility!"
+  },
+  {
+    "objectID": "imap-presentation.html#excel",
+    "href": "imap-presentation.html#excel",
+    "title": "Writing code, saving sanity",
+    "section": "Excel = …",
+    "text": "Excel = …"
+  },
+  {
+    "objectID": "imap-presentation.html#code",
+    "href": "imap-presentation.html#code",
+    "title": "Writing code, saving sanity",
+    "section": "Code = …",
+    "text": "Code = …"
+  },
+  {
+    "objectID": "imap-presentation.html#but-theres-another-issue-with-excel",
+    "href": "imap-presentation.html#but-theres-another-issue-with-excel",
+    "title": "Writing code, saving sanity",
+    "section": "But there’s another issue with Excel…",
+    "text": "But there’s another issue with Excel…\n\nHave you ever stared at an Excel spreadsheet and wondered:"
+  },
+  {
+    "objectID": "imap-presentation.html#how-did-you-make-this-lasagne",
+    "href": "imap-presentation.html#how-did-you-make-this-lasagne",
+    "title": "Writing code, saving sanity",
+    "section": "How did you make this lasagne?",
+    "text": "How did you make this lasagne?"
+  },
+  {
+    "objectID": "imap-presentation.html#so-code-is-more-flexible-but-what-else",
+    "href": "imap-presentation.html#so-code-is-more-flexible-but-what-else",
+    "title": "Writing code, saving sanity",
+    "section": "So code is more “flexible”, but what else?",
+    "text": "So code is more “flexible”, but what else?\n\nQuestion: which policy has the largest premium size?\n\n\n\n\nraw\n\n# A tibble: 3 × 5\n  policy_id class_of_business premium_usd premium_gbp premium_cad\n      <dbl> <fct>                   <dbl>       <dbl>       <dbl>\n1         1 liability              100000          NA          NA\n2         2 property                   NA      105000          NA\n3         3 cyber                      NA      100000       15000\n\nforex_rates\n\n USD  GBP  CAD \n1.00 0.78 1.36"
+  },
+  {
+    "objectID": "imap-presentation.html#step-1-tidyrpivot_longer",
+    "href": "imap-presentation.html#step-1-tidyrpivot_longer",
+    "title": "Writing code, saving sanity",
+    "section": "Step 1: tidyr::pivot_longer()",
+    "text": "Step 1: tidyr::pivot_longer()\n\nraw |>\n  tidyr::pivot_longer(cols = starts_with('premium'), \n                      names_to = 'currency',\n                      values_to = 'premium')\n\n# A tibble: 9 × 4\n  policy_id class_of_business currency    premium\n      <dbl> <fct>             <chr>         <dbl>\n1         1 liability         premium_usd  100000\n2         1 liability         premium_gbp      NA\n3         1 liability         premium_cad      NA\n4         2 property          premium_usd      NA\n5         2 property          premium_gbp  105000\n6         2 property          premium_cad      NA\n7         3 cyber             premium_usd      NA\n8         3 cyber             premium_gbp  100000\n9         3 cyber             premium_cad   15000"
+  },
+  {
+    "objectID": "imap-presentation.html#step-2-dplyrfilter",
+    "href": "imap-presentation.html#step-2-dplyrfilter",
+    "title": "Writing code, saving sanity",
+    "section": "Step 2: dplyr::filter()",
+    "text": "Step 2: dplyr::filter()\n\nraw |>\n  tidyr::pivot_longer(cols = starts_with('premium'), \n                      names_to = 'currency',\n                      values_to = 'premium') |>\n  dplyr::filter(!is.na(premium))\n\n# A tibble: 4 × 4\n  policy_id class_of_business currency    premium\n      <dbl> <fct>             <chr>         <dbl>\n1         1 liability         premium_usd  100000\n2         2 property          premium_gbp  105000\n3         3 cyber             premium_gbp  100000\n4         3 cyber             premium_cad   15000"
+  },
+  {
+    "objectID": "imap-presentation.html#step-3-dplyrmutate",
+    "href": "imap-presentation.html#step-3-dplyrmutate",
+    "title": "Writing code, saving sanity",
+    "section": "Step 3: dplyr::mutate()",
+    "text": "Step 3: dplyr::mutate()\n\nraw |>\n  tidyr::pivot_longer(cols = starts_with('premium'), \n                      names_to = 'currency',\n                      values_to = 'premium') |>\n  dplyr::filter(!is.na(premium)) |>\n  dplyr::mutate(currency = stringr::str_remove_all(currency,\n                                                   pattern = 'premium_'),\n                currency = base::toupper(currency))\n\n# A tibble: 4 × 4\n  policy_id class_of_business currency premium\n      <dbl> <fct>             <chr>      <dbl>\n1         1 liability         USD       100000\n2         2 property          GBP       105000\n3         3 cyber             GBP       100000\n4         3 cyber             CAD        15000"
+  },
+  {
+    "objectID": "imap-presentation.html#step-4-dplyrmutate",
+    "href": "imap-presentation.html#step-4-dplyrmutate",
+    "title": "Writing code, saving sanity",
+    "section": "Step 4: dplyr::mutate()",
+    "text": "Step 4: dplyr::mutate()\n\nraw |>\n  tidyr::pivot_longer(cols = starts_with('premium'), \n                      names_to = 'currency',\n                      values_to = 'premium') |>\n  dplyr::filter(!is.na(premium)) |>\n  dplyr::mutate(currency = stringr::str_remove_all(currency,\n                                                   pattern = 'premium_'),\n                currency = base::toupper(currency),\n                premium_usd = forex_rates[currency] * premium)\n\n# A tibble: 4 × 5\n  policy_id class_of_business currency premium premium_usd\n      <dbl> <fct>             <chr>      <dbl>       <dbl>\n1         1 liability         USD       100000      100000\n2         2 property          GBP       105000       81900\n3         3 cyber             GBP       100000       78000\n4         3 cyber             CAD        15000       20400"
+  },
+  {
+    "objectID": "imap-presentation.html#step-5-dplyrsummarise",
+    "href": "imap-presentation.html#step-5-dplyrsummarise",
+    "title": "Writing code, saving sanity",
+    "section": "Step 5: dplyr::summarise()",
+    "text": "Step 5: dplyr::summarise()\n\nraw |>\n  tidyr::pivot_longer(cols = starts_with('premium'), \n                      names_to = 'currency',\n                      values_to = 'premium') |>\n  dplyr::filter(!is.na(premium)) |>\n  dplyr::mutate(currency = stringr::str_remove_all(currency,\n                                                   pattern = 'premium_'),\n                currency = base::toupper(currency),\n                premium_usd = forex_rates[currency] * premium) |>\n  dplyr::summarise(total_premium_usd = sum(premium_usd),\n                   .by = 'policy_id')\n\n# A tibble: 3 × 2\n  policy_id total_premium_usd\n      <dbl>             <dbl>\n1         1            100000\n2         2             81900\n3         3             98400"
+  },
+  {
+    "objectID": "imap-presentation.html#step-6-optional-remove-qualifiers",
+    "href": "imap-presentation.html#step-6-optional-remove-qualifiers",
+    "title": "Writing code, saving sanity",
+    "section": "Step 6 (Optional): remove qualifiers",
+    "text": "Step 6 (Optional): remove qualifiers\n\nlibrary(tidyverse)\n\nraw |>\n  pivot_longer(cols = starts_with('premium'), \n               names_to = 'currency',\n               values_to = 'premium') |>\n  filter(!is.na(premium)) |>\n  mutate(currency = str_remove_all(currency,\n                                   pattern = 'premium_'),\n         currency = toupper(currency),\n         premium_usd = forex_rates[currency] * premium) |>\n  summarise(total_premium_usd = sum(premium_usd),\n            .by = 'policy_id')\n\n# A tibble: 3 × 2\n  policy_id total_premium_usd\n      <dbl>             <dbl>\n1         1            100000\n2         2             81900\n3         3             98400"
+  },
+  {
+    "objectID": "imap-presentation.html#our-final-recipe",
+    "href": "imap-presentation.html#our-final-recipe",
+    "title": "Writing code, saving sanity",
+    "section": "Our final ‘recipe’",
+    "text": "Our final ‘recipe’\n\nlibrary(tidyverse)\n\nclean <- raw |>\n  pivot_longer(cols = starts_with('premium'), \n               names_to = 'currency',\n               values_to = 'premium') |>\n  filter(!is.na(premium)) |>\n  mutate(currency = str_remove_all(currency,\n                                   pattern = 'premium_'),\n         currency = toupper(currency),\n         premium_usd = forex_rates[currency] * premium) |>\n  summarise(total_premium_usd = sum(premium_usd),\n            .by = 'policy_id')"
+  },
+  {
+    "objectID": "imap-presentation.html#our-final-recipe-1",
+    "href": "imap-presentation.html#our-final-recipe-1",
+    "title": "Writing code, saving sanity",
+    "section": "Our final ‘recipe’",
+    "text": "Our final ‘recipe’\n\nlibrary(tidyverse)\n\nclean <- raw |>\n  pivot_longer(cols = starts_with('premium'), \n               names_to = 'currency',\n               values_to = 'premium') |>\n  filter(!is.na(premium)) |>\n  mutate(currency = str_remove_all(currency,\n                                   pattern = 'premium_'),\n         currency = toupper(currency),\n         premium_usd = forex_rates[currency] * premium) |>\n  summarise(total_premium_usd = sum(premium_usd),\n            .by = 'policy_id') \n\nclean\n\n# A tibble: 3 × 2\n  policy_id total_premium_usd\n      <dbl>             <dbl>\n1         1            100000\n2         2             81900\n3         3             98400"
+  },
+  {
+    "objectID": "imap-presentation.html#the-point-is",
+    "href": "imap-presentation.html#the-point-is",
+    "title": "Writing code, saving sanity",
+    "section": "The point is…",
+    "text": "The point is…\n… text wins, every time\n\n\n\n\n\n\n\nhttps://www.nonstandarddev.com"
+  }
+]
