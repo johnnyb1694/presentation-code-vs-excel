@@ -1,6 +1,6 @@
 ---
 title: "Writing code, saving sanity"
-subtitle: "Why *text* is the real superhero"
+subtitle: "Why *text* is the real superhero 🦸"
 format:
   revealjs:
     slide-number: true
@@ -8,7 +8,7 @@ format:
     footer: https://www.nonstandarddev.com
 ---
 
-## Introduction
+## Introduction 
 
 ::: columns
 ::: {.column width="40%"}
@@ -17,11 +17,13 @@ format:
 
 ::: {.column width="60%"}
 ::: {.fragment .fade-in-then-semi-out}
-My name is `Johnny Breen` 
+My name is `Johnny Breen`
 :::
+
 ::: {.fragment .fade-in-then-semi-out}
 `Portfolio Optimisation Lead` at Tokio Marine Kiln
 :::
+
 ::: {.fragment .fade-in-then-semi-out}
 You can find me at: `nonstandarddev.com`
 :::
@@ -47,7 +49,6 @@ You can find me at: `nonstandarddev.com`
 . . .
 
 ![](images/dolmio.jpeg){.absolute top="150" left="100" width="200" height="200"}
-
 
 . . .
 
